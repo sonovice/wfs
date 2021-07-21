@@ -31,6 +31,6 @@ Set up a fresh installation of [Raspberry Pi OS Lite](https://www.raspberrypi.or
    pip3 install kivy rpi.gpio mock.gpio
 
    # Add script to autostart
-   sudo sed -i 's|^exit 0|python /home/pi/wfs/src/main.py \&\n&|g' /etc/rc.local
+   sudo sed -i 's|^exit 0|python3 /home/pi/wfs/src/main.py \&\n&|g' /etc/rc.local
    ```
 3. Reboot
