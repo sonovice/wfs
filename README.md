@@ -11,12 +11,9 @@ Set up a fresh installation of [Raspberry Pi OS Lite](https://www.raspberrypi.or
 2. Execute the following commands:
 
    ```bash
-   # Get latest code
-   cd /home/pi
-   git clone https://github.com/sonovice/wfs.git
-   
    # Install dependencies
    sudo apt update && sudo apt install -y \
+       git \
        python3 \
        python3-pip \
        libsdl2-dev \
@@ -29,6 +26,10 @@ Set up a fresh installation of [Raspberry Pi OS Lite](https://www.raspberrypi.or
        libavcodec-dev \
        zlib1g-dev
    sudo pip3 install kivy rpi.gpio mock.gpio
+   
+   # Get latest code
+   cd /home/pi
+   git clone https://github.com/sonovice/wfs.git
 
    # Add script to autostart
    sudo sed -i 's|^exit 0|python3 /home/pi/wfs/src/main.py \&\n&|g' /etc/rc.local
