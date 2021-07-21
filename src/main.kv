@@ -1,0 +1,397 @@
+<WfsRemote>:
+    ScreenBoot:
+        name: 'screen_boot'
+
+    ScreenShutdown:
+        name: 'screen_shutdown'
+
+    ScreenMain:
+        name: 'screen_main'
+        id: screen_main
+
+
+
+<ScreenBoot>:
+    AnchorLayout:
+        anchor_x: 'center'
+        anchor_y: 'center'
+        canvas.before:
+            Color:
+                rgb: .13, .13, .13
+            Rectangle:
+                size: self.size
+                # source: '../gfx/background.png'
+
+        BoxLayout:
+            size_hint: (0.4, 0.6)
+            padding: 5
+            orientation: 'vertical'
+            spacing: 5
+
+            Button:
+                id: boot_button
+                halign: 'center'
+                font_size: '20sp'
+                text: 'System\neinschalten'
+                on_press:
+                    root.boot()
+            ProgressBar:
+                id: boot_progress
+                min: 0
+                max: 5
+                value: 0
+            Label:
+                id: boot_text
+                font_size: '18sp'
+                text: 'System ist abgeschaltet'
+
+<ScreenShutdown>:
+    AnchorLayout:
+        anchor_x: 'center'
+        anchor_y: 'center'
+        canvas.before:
+            Color:
+                rgb: .13, .13, .13
+            Rectangle:
+                size: self.size
+                # source: '../gfx/background.png'
+
+        BoxLayout:
+            size_hint: (0.4, 0.6)
+            padding: 5
+            orientation: 'vertical'
+            spacing: 5
+            Label:
+                halign: 'center'
+                font_size: '28sp'
+                text: 'System wirklich herunterfahren?'
+            BoxLayout:
+                orientation: 'horizontal'
+                spacing: 10
+                Button:
+                    id: shutdown_button_yes
+                    halign: 'center'
+                    font_size: '20sp'
+                    text: 'Ja'
+                    on_press: root.shutdown()
+                Button:
+                    id: shutdown_button_no
+                    halign: 'center'
+                    font_size: '20sp'
+                    text: 'Nein'
+                    on_press:
+                        # root.manager.transition.direction = 'right'
+                        root.manager.current = 'screen_main'
+            ProgressBar:
+                id: shutdown_progress
+                min: 0
+                max: 5
+                value: 0
+            Label:
+                id: shutdown_text
+                font_size: '18sp'
+                text: 'System ist eingeschaltet'
+
+<ScreenMain>:
+    BoxLayout:
+        orientation: 'vertical'
+        canvas.before:
+            Color:
+                rgb: .2, .2, .2
+            Rectangle:
+                size: self.size
+                # source: '../gfx/background.png'
+
+        BoxLayout:
+            padding: 10
+            orientation: 'vertical'
+            spacing: 10
+
+            BoxLayout:
+                orientation: 'horizontal'
+                spacing: 20
+                size_hint_y: 16
+
+                BoxLayout:
+                    size_hint_x: 1
+                    spacing: 8
+                    orientation: 'vertical'
+                    ToggleButton:
+                        text: 'SIAP\n(Nachhall)'
+                        halign: 'center'
+                        #height: '20'
+                        group: 'mode'
+                        font_size: '20sp'
+                        #bold: True
+                        on_press:
+                            root.set_mode_siap()
+                            root.ids.sm_main.current = 'screen_siap'
+                            self.state = 'down'
+                    ToggleButton:
+                        text: 'SAW'
+                        group: 'mode'
+                        font_size: '20sp'
+                        #bold: True
+                        on_press:
+                            root.ids.sm_main.current = 'screen_saw'
+                            root.set_mode_saw()
+                            self.state = 'down'
+                    ToggleButton:
+                        text: 'Demo'
+                        group: 'mode'
+                        font_size: '20sp'
+                        #bold: True
+                        on_press:
+                            root.ids.sm_main.current = 'screen_demo'
+                            root.set_mode_demo()
+                            self.state = 'down'
+                    FloatLayout:
+                        size_hint_y: 1
+					ToggleButton:
+                        text: 'Verstärker\ndeaktivieren'
+                        halign: 'center'
+                        #height: '20'
+                        font_size: '20sp'
+                        on_press:
+                            root.set_amps(self.state == 'down')
+                    Button:
+                        text: 'System\nherunterfahren'
+                        halign: 'center'
+                        #height: '20'
+                        font_size: '20sp'
+                        on_press:
+                            root.manager.current = 'screen_shutdown'
+
+                ScreenManager:
+                    size_hint_x: 3
+                    id: sm_main
+                    canvas.before:
+                        Color:
+                            rgb: 0.13, 0.13, 0.13
+                        Rectangle:
+                            size: self.size
+                            pos: self.pos
+
+                    Screen:
+                        name: 'screen_start'
+                        AnchorLayout:
+                            anchor_x: 'center'
+                            anchor_y: 'center'
+
+                            Label:
+                                text: 'Das System ist jetzt hochgefahren.\n\n\nBei Problemen wenden Sie sich bitte an\nMalte Heins im ETI.'
+                                halign: 'center'
+                                font_size: '28sp'
+
+                    Screen:
+                        name: 'screen_saw'
+                        AnchorLayout:
+                            anchor_x: 'center'
+                            anchor_y: 'center'
+
+                            Label:
+                                text: 'WFS ist im SAW-Modus\n'
+                                halign: 'center'
+                                font_size: '28sp'
+
+                    Screen:
+                        name: 'screen_siap'
+                        ScrollView:
+                            size: self.size
+                            GridLayout:
+                                size: self.size
+                                spacing: 10
+                                padding: 20
+                                cols: 1
+                                # set GridLayout to be unrestricted vertically
+                                size_hint_y:  None
+                                # set the height of the layout to the combined height of the children
+                                height: self.minimum_height
+
+                                Label:
+                                    size_hint_y: None
+                                    height: '32sp'
+                                    font_size: '20sp'
+                                    text: 'Hinweis: Zwischen 2 Preset-Wechseln\nmuss 60 Sekunden gewartet werden.'
+                                ToggleButton:
+                                    id: siap_button_0
+                                    size_hint_y: None
+                                    height: '40sp'
+                                    font_size: '20sp'
+                                    text: 'Kein Nachhall (1,6s)'
+                                    group: 'siap'
+                                    state: 'down'
+                                    on_press:
+                                        self.state = 'down'
+                                        root.set_siap_preset(0)
+                                ToggleButton:
+                                    id: siap_button_1
+                                    size_hint_y: None
+                                    height: '40sp'
+                                    font_size: '20sp'
+                                    text: 'Kammermusik / Kammerorchester (1,8s)'
+                                    group: 'siap'
+                                    on_press:
+                                        self.state = 'down'
+                                        root.set_siap_preset(1)
+                                ToggleButton:
+                                    id: siap_button_2
+                                    size_hint_y: None
+                                    height: '40sp'
+                                    font_size: '20sp'
+                                    text: 'Sinfonieorchester (2,0s)'
+                                    group: 'siap'
+                                    on_press:
+                                        self.state = 'down'
+                                        root.set_siap_preset(2)
+                                ToggleButton:
+                                    id: siap_button_3
+                                    size_hint_y: None
+                                    height: '40sp'
+                                    font_size: '20sp'
+                                    text: 'Spätromantische sinfonische Musik (2,3s)'
+                                    group: 'siap'
+                                    on_press:
+                                        self.state = 'down'
+                                        root.set_siap_preset(3)
+                                ToggleButton:
+                                    id: siap_button_4
+                                    size_hint_y: None
+                                    height: '40sp'
+                                    font_size: '20sp'
+                                    text: 'Chor mit Orchester / Orgel (2,6s)'
+                                    group: 'siap'
+                                    on_press:
+                                        self.state = 'down'
+                                        root.set_siap_preset(4)
+                                ToggleButton:
+                                    id: siap_button_5
+                                    size_hint_y: None
+                                    height: '40sp'
+                                    font_size: '20sp'
+                                    text: 'Orgel / Chor (3,2s)'
+                                    group: 'siap'
+                                    on_press:
+                                        self.state = 'down'
+                                        root.set_siap_preset(5)
+                                ToggleButton:
+                                    id: siap_button_6
+                                    size_hint_y: None
+                                    height: '40sp'
+                                    font_size: '20sp'
+                                    text: 'Orgel / Chor (5,0s)'
+                                    group: 'siap'
+                                    on_press:
+                                        self.state = 'down'
+                                        root.set_siap_preset(6)                                
+                                #ProgressBar:
+                                #    id: siap_progress
+                                #    min: 0
+                                #    max: 60
+                                #    value: 0
+
+                    Screen:
+                        name: 'screen_demo'
+                        ScrollView:
+                            size: self.size
+                            GridLayout:
+                                size: self.size
+                                spacing: 20
+                                padding: 20
+                                cols: 1
+                                # set GridLayout to be unrestricted vertically
+                                size_hint_y:  None
+                                # set the height of the layout to the combined height of the children
+                                height: self.minimum_height
+                                ToggleButton:
+                                    id: demo_button_0
+                                    size_hint_y: None
+                                    height: '60sp'
+                                    font_size: '20sp'
+                                    text: 'Stopp'
+                                    group: 'demo'
+                                    state: 'down'
+                                    on_press:
+                                        root.stop_demo()
+                                        self.state = 'down'
+                                Label:
+                                    size_hint_y: None
+                                    height: '10sp'
+                                ToggleButton:
+                                    id: demo_button_1
+                                    size_hint_y: None
+                                    height: '60sp'
+                                    font_size: '20sp'
+                                    text: 'Anno'
+                                    group: 'demo'
+                                    on_press:
+                                        self.state = 'down'
+                                        root.play_demo('3 Demo Anno')
+                                ToggleButton:
+                                    id: demo_button_2
+                                    size_hint_y: None
+                                    height: '60sp'
+                                    font_size: '20sp'
+                                    text: 'Dschungel'
+                                    group: 'demo'
+                                    on_press:
+                                        self.state = 'down'
+                                        root.play_demo('4 Demo Jungle 3D')
+                                ToggleButton:
+                                    id: demo_button_3
+                                    size_hint_y: None
+                                    height: '60sp'
+                                    font_size: '20sp'
+                                    text: 'Messerwerfer'
+                                    group: 'demo'
+                                    on_press:
+                                        self.state = 'down'
+                                        root.play_demo('5 Demo Messerwerfer 3D')
+
+                    Screen:
+                        name: 'screen_vivace'
+                        ScrollView:
+                            BoxLayout:
+                                orientation: 'vertical'
+                                Label:
+                                    text: 'Vivace'
+                                    halign: 'center'
+                                    font_size: '28sp'
+
+            BoxLayout:
+                orientation: 'horizontal'
+                size_hint_y: 1.5
+                spacing: 20
+
+                Label:
+                    text: 'Lautstärke:'
+                    font_size: '20sp'
+                    size_hint_x: 4
+                    halign: 'left'
+
+                Label:
+                    id: text_volume
+                    halign: 'right'
+                    font_size: '20sp'
+                    size_hint_x: 2
+
+                Slider:
+                    id: slider_volume
+                    size_hint_x: 15
+                    min: -60
+                    max: 0
+                    step: 1
+                    value: 0
+                    on_value:
+                        root.set_volume(self.value)
+                        root.ids.mute.state = 'normal'
+                        root.ids.text_volume.text = str(int(root.ids.slider_volume.value)) + ' dB'
+
+                ToggleButton:
+                    id: mute
+                    text: 'Stumm'
+                    size_hint_x: 3
+                    font_size: '20sp'
+                    on_press:
+                        root.set_mute(self.state == 'down')
+                    #bold: True
