@@ -8,7 +8,7 @@ Set up a fresh installation of [Raspberry Pi OS Lite](https://www.raspberrypi.or
    * Username: "pi"  
    * Password: "raspberry"
 
-2. Enter the following commands:
+2. Execute the following commands:
 
    ```bash
    # Get latest code
@@ -28,7 +28,7 @@ Set up a fresh installation of [Raspberry Pi OS Lite](https://www.raspberrypi.or
        libavformat-dev \
        libavcodec-dev \
        zlib1g-dev
-   pip3 install kivy rpi.gpio mock.gpio
+   sudo pip3 install kivy rpi.gpio mock.gpio
 
    # Add script to autostart
    sudo sed -i 's|^exit 0|python3 /home/pi/wfs/src/main.py \&\n&|g' /etc/rc.local

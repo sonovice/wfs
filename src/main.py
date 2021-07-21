@@ -6,7 +6,10 @@ DEBUG = False
 
 import os
 
-import RPi.GPIO as GPIO
+if DEBUG:
+    from Mock.GPIO import GPIO
+else:
+    import RPi.GPIO as GPIO
     
 PIN_LAMP = 7
 GPIO.setmode(GPIO.BOARD)
