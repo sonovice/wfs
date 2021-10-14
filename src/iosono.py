@@ -14,10 +14,10 @@ class Iosono(object):
         try:
             Iosono.__client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
             Iosono.__client.connect((Iosono._IP, Iosono._PORT))
-            Iosono.__client.send(msg + '\n')
+            Iosono.__client.send((msg + '\n').encode('utf-8'))
             data = ''
             while ':OK:' not in data:
-                data += Iosono.__client.recv(2048)
+                data += Iosono.__client.recv(2048).decode('utf-8')
             data_list = [s.strip() for s in data.splitlines()]
             del data_list[-1]
             Iosono.__client.close()
