@@ -31,6 +31,9 @@ Set up a fresh installation of [Raspberry Pi OS Lite](https://www.raspberrypi.or
    cd /home/pi
    git clone https://github.com/sonovice/wfs.git
 
+   # Set static IP
+   sudo echo -e "auto eth0\nallow-hotplug eth0\niface eth0 inet static\naddress 192.168.1.99\nnetmask 255.255.255.0\ngateway 192.168.1.254\n" >> /etc/network/interfaces
+   
    # Add script to autostart
    sudo sed -i 's|^exit 0|python3 /home/pi/wfs/src/main.py \&\n&|g' /etc/rc.local
    ```
